@@ -35,6 +35,6 @@ jobs:
           host: ${{ secrets.SERVER_IP }}  
           port: ${{ secrets.SERVER_PORT }} 
           username: ${{ secrets.USERNAME }} 
-          password: ${{ secrets.PASSWORD }} 
+          privateKey: ${{ secrets.PRIVATE_KEY }}
           localDir: "dist" 
           remoteDir: ${{ secrets.SERVER_DESTINATION }}
