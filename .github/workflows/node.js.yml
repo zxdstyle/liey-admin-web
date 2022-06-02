@@ -29,12 +29,12 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test
-    - name: 自动同步文件夹到我的服务器
-        uses: wangyucode/sftp-upload-action@v1.1
-        with:
-          host: ${{ secrets.SERVER_IP }}  
-          port: ${{ secrets.SERVER_PORT }} 
-          username: ${{ secrets.USERNAME }} 
+    - name: "自动同步文件夹到我的服务器"
+      uses: wangyucode/sftp-upload-action@v1.1
+      with:
+          host: ${{ secrets.SERVER_IP }}
+          port: ${{ secrets.SERVER_PORT }}
+          username: ${{ secrets.USERNAME }}
           privateKey: ${{ secrets.PRIVATE_KEY }}
-          localDir: "dist" 
+          localDir: "dist"
           remoteDir: ${{ secrets.SERVER_DESTINATION }}
