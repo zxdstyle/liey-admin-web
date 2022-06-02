@@ -15,7 +15,7 @@
 
 <script lang="tsx" setup>
 import { computed, h, onActivated, reactive } from 'vue';
-import { NButton, useDialog } from 'naive-ui';
+import { NButton } from 'naive-ui';
 import { Icon } from '@iconify/vue';
 import { iconifyRender } from '@/utils';
 import { BasicTable, useTable, TableActionOption, TableAction } from '@/components/basic/table';
@@ -25,7 +25,6 @@ import ApiMenu from '@/service/api/scaffold/menu';
 import useBasicDialog from '@/hooks/common/useDialog';
 import MenuForm from './form.vue';
 
-const dialog = useDialog();
 const [registerModal, { openModal, setModalProps, closeModal }] = useModal();
 
 const actions: TableActionOption = [

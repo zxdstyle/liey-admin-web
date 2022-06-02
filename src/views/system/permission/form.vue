@@ -57,7 +57,6 @@ import { useLoading } from '@/hooks';
 import ApiPermission from '@/service/api/scaffold/permission';
 import { FormActionType } from '@/components/basic/form/src/types/form';
 import { ApiTreeSelect } from '@/components/basic/form';
-import ApiMenu from '@/service/api/scaffold/menu';
 
 const message = useMessage();
 const permissionForm = ref<Nullable<FormActionType>>(null);
@@ -149,7 +148,11 @@ const getTreeSelect = {
       {
         id: 0,
         name: '顶级权限',
-        children: data
+        children: data,
+        parent_id: 0,
+        slug: '',
+        sort_num: 0,
+        rules: []
       }
     ];
   }

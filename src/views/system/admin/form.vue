@@ -1,5 +1,5 @@
 <template>
-  <BasicForm @register="registerForm"></BasicForm>
+  <BasicForm @register="registerForm" />
 </template>
 
 <script lang="ts" setup>
@@ -14,16 +14,6 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['submit']);
-
-const formatTreeData = (data: Api.Menu[]): Api.Menu[] => {
-  return [
-    {
-      id: 0,
-      title: '顶级菜单',
-      children: data
-    }
-  ];
-};
 
 const [registerForm, { resetFields }] = useForm({
   model: props.model,

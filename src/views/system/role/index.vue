@@ -25,8 +25,18 @@ import { useIndex } from './hooks';
 
 const [registerModal, { openModal, setModalProps, closeModal }] = useModal();
 
-const state = reactive({
-  model: {}
+interface State {
+  model: Api.Role;
+}
+
+const state = reactive<State>({
+  model: {
+    id: 0,
+    name: '',
+    slug: '',
+    created_at: '',
+    updated_at: ''
+  }
 });
 
 const router = useRouter();
@@ -38,7 +48,13 @@ const openEditModal = (row: Api.Role) => {
 };
 
 const openCreateModal = () => {
-  state.model = {};
+  state.model = {
+    id: 0,
+    name: '',
+    slug: '',
+    created_at: '',
+    updated_at: ''
+  };
   openModal();
   setModalProps({ title: '新增角色' });
 };

@@ -2,12 +2,12 @@
   <n-card class="rounded-xl h-full">
     <BasicTable @register="registerTable">
       <template #toolbar>
-        <n-button type="primary" @click="openCreateModal"><Icon icon="ph:plus-bold"></Icon>新增权限</n-button>
+        <n-button type="primary" @click="openCreateModal"><Icon icon="ph:plus-bold" />新增权限</n-button>
       </template>
     </BasicTable>
 
     <BasicModal style="width: 1000px" @register="registerModal">
-      <RoleForm v-bind="getFormBind"></RoleForm>
+      <PermissionForm v-bind="getFormBind" />
     </BasicModal>
   </n-card>
 </template>
@@ -19,14 +19,25 @@ import { TableActionHandler } from '@/components/basic/table';
 import ApiPermission from '@/service/api/scaffold/permission';
 import { useModal } from '@/components/basic/modal';
 import useBasicDialog from '@/hooks/common/useDialog';
-import RoleForm from './form.vue';
+import PermissionForm from './form.vue';
 import { useIndex } from './hooks';
 
 const { warning } = useBasicDialog();
 const [registerModal, { openModal, setModalProps, closeModal }] = useModal();
 
-const state = reactive({
-  model: {}
+interface State {
+  model: Api.Permission;
+}
+
+const state = reactive<State>({
+  model: {
+    id: 0,
+    name: '',
+    slug: '',
+    parent_id: 0,
+    sort_num: 0,
+    rules: []
+  }
 });
 
 const openEditModal = (row: Api.Permission) => {
@@ -36,7 +47,14 @@ const openEditModal = (row: Api.Permission) => {
 };
 
 const openCreateModal = () => {
-  state.model = {};
+  state.model = {
+    id: 0,
+    name: '',
+    slug: '',
+    parent_id: 0,
+    sort_num: 0,
+    rules: []
+  };
   openModal();
   setModalProps({ title: '新增权限' });
 };
