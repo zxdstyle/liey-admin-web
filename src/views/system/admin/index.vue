@@ -2,12 +2,12 @@
   <n-card class="rounded-xl h-full">
     <BasicTable @register="registerTable">
       <template #toolbar>
-        <n-button type="primary" @click="openCreateModal"><Icon icon="ph:plus-bold"></Icon>新增管理员</n-button>
+        <n-button type="primary" @click="openCreateModal"><Icon icon="ph:plus-bold" />新增管理员</n-button>
       </template>
     </BasicTable>
 
     <BasicModal style="width: 700px" @register="registerModal">
-      <AdminForm v-bind="getFormBind"></AdminForm>
+      <AdminForm v-bind="getFormBind" />
     </BasicModal>
   </n-card>
 </template>

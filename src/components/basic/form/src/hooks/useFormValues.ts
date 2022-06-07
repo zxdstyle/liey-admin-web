@@ -10,7 +10,7 @@ interface UseFormValuesContext {
   formModel: Recordable;
 }
 
-export default function useFormValues({ defaultValueRef, getSchema, formModel, getProps }: UseFormValuesContext) {
+export default function useFormValues({ defaultValueRef, getSchema, formModel }: UseFormValuesContext) {
   function initDefault() {
     const schemas = unref(getSchema);
     const obj: Recordable = {};

@@ -24,15 +24,11 @@ async function fetch() {
   const { api } = props;
   if (!api || !isFunction(api)) return;
 
-  try {
-    const res = await api(props.params);
-    if (props.afterFetch) {
-      data.value = props.afterFetch(res.data);
-    } else {
-      data.value = res.data;
-    }
-  } catch (e) {
-    console.error(e);
+  const res = await api(props.params);
+  if (props.afterFetch) {
+    data.value = props.afterFetch(res.data);
+  } else {
+    data.value = res.data;
   }
 }
 

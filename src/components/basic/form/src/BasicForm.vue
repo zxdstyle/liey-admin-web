@@ -14,7 +14,7 @@
     <div class="flex justify-end items-center">
       <n-button class="mr-2" @click="resetFields">
         <template #icon>
-          <Icon icon="carbon:reset" class="text-xl"></Icon>
+          <Icon icon="carbon:reset" class="text-xl" />
         </template>
         重置
       </n-button>
@@ -70,8 +70,6 @@ export default defineComponent({
         if (p && p.onSubmit) {
           await p.onSubmit(formModel);
         }
-      } catch (e) {
-        console.warn(e);
       } finally {
         endLoading();
       }

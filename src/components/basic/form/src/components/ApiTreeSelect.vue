@@ -1,5 +1,5 @@
 <template>
-  <NTreeSelect v-bind="getAttrs"></NTreeSelect>
+  <NTreeSelect v-bind="getAttrs" />
 </template>
 
 <script lang="ts">
@@ -58,12 +58,8 @@ export default defineComponent({
       startLoading();
       treeData.value = [];
       let result;
-      try {
-        const { data } = await api(props.params);
-        result = data;
-      } catch (e) {
-        console.error(e);
-      }
+      const { data } = await api(props.params);
+      result = data;
 
       endLoading();
       if (!result) return;

@@ -5,7 +5,7 @@
     :options="getOptions"
     :loading="loading"
     @update:value="handleChange"
-  ></n-select>
+  />
 </template>
 
 <script lang="ts">

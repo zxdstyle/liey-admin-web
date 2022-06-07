@@ -1,5 +1,5 @@
 <template>
-  <NSwitch v-bind="bindValues"></NSwitch>
+  <NSwitch v-bind="bindValues" />
 </template>
 
 <script lang="ts" setup>

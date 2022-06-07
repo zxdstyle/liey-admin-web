@@ -5,7 +5,7 @@ const apis: MockMethod[] = [
   {
     url: '/mock/menus',
     method: 'post',
-    response: (options: Service.MockOption): Service.MockServiceResult => {
+    response: (): Service.MockServiceResult => {
       const routeHomeName: AuthRoute.RouteKey = 'dashboard_workbench';
       return {
         code: 200,

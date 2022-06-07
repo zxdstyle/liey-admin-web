@@ -8,7 +8,7 @@
       </n-input>
     </template>
     <template #header>
-      <n-input v-model:value="searchValue" placeholder="搜索图标"></n-input>
+      <n-input v-model:value="searchValue" placeholder="搜索图标" />
     </template>
     <div v-if="iconsList.length > 0" class="grid grid-cols-9 h-auto overflow-auto">
       <template v-for="iconItem in iconsList" :key="iconItem">

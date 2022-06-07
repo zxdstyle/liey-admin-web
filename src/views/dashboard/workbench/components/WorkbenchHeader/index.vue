@@ -9,7 +9,7 @@
         </div>
       </div>
       <n-space :size="24" :wrap="false">
-        <n-statistic v-for="item in statisticData" :key="item.id" class="whitespace-nowrap" v-bind="item"></n-statistic>
+        <n-statistic v-for="item in statisticData" :key="item.id" class="whitespace-nowrap" v-bind="item" />
       </n-space>
     </div>
   </n-card>

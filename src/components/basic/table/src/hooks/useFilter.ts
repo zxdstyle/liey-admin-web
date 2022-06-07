@@ -1,11 +1,11 @@
 import { reactive } from 'vue';
-import { DataTableColumn, DataTableFilterState } from 'naive-ui';
+import { DataTableFilterState } from 'naive-ui';
 import { isArray, isEmpty } from 'lodash-es';
 
 export default function useFilter(reload: (opt?: Recordable) => void) {
   let filterParams = reactive<Recordable>({});
 
-  const handleFilterChange = (filters: DataTableFilterState, initiatorColumn: DataTableColumn) => {
+  const handleFilterChange = (filters: DataTableFilterState) => {
     filterParams = {};
     console.log(filters);
     Object.keys(filters).forEach(key => {

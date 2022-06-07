@@ -12,7 +12,7 @@ interface UseFormActionContext {
   defaultValueRef: Ref<Recordable>;
 }
 
-export default function useFormEvent({ emit, getProps, formModel, getSchema, defaultValueRef }: UseFormActionContext) {
+export default function useFormEvent({ getProps, formModel, getSchema, defaultValueRef }: UseFormActionContext) {
   async function resetFields(): Promise<void> {
     Object.keys(formModel).forEach(key => {
       const schema = unref(getSchema).find(item => item.field === key);

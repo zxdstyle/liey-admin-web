@@ -1,6 +1,6 @@
 <template>
   <n-divider title-placement="center">主题配置</n-divider>
-  <textarea id="themeConfigCopyTarget" v-model="dataClipboardText" class="absolute opacity-0" />
+  <textarea id="themeConfigCopyTarget" v-model="dataClipboardText" class="absolute opacity-0"></textarea>
   <n-space vertical>
     <div ref="copyRef" data-clipboard-target="#themeConfigCopyTarget">
       <n-button type="primary" :block="true">拷贝当前配置</n-button>
