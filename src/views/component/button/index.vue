@@ -58,7 +58,7 @@ const { loading, startLoading, endLoading } = useLoading();
 const buttonExample: ButtonExample[] = [
   {
     id: 0,
-    label: '基础1',
+    label: '基础',
     buttons: [
       {
         id: 0,
@@ -572,4 +572,5 @@ const buttonExample: ButtonExample[] = [
   }
 ];
 </script>
+
 <style scoped></style>

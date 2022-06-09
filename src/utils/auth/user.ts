@@ -1,5 +1,5 @@
 import { EnumStorageKey } from '@/enum';
-import { getLocal, removeLocal, setLocal } from '../storage';
+import { setLocal, getLocal, removeLocal } from '../storage';
 
 /** 设置token */
 export function setToken(token: string) {

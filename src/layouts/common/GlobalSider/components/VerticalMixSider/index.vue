@@ -58,7 +58,7 @@ const firstDegreeMenus = computed(() =>
 
 function getActiveParentRouteName() {
   firstDegreeMenus.value.some(item => {
-    const routeName = route.name as string;
+    const routeName = (route.meta?.activeMenu ? route.meta.activeMenu : route.name) as string;
     const flag = routeName?.includes(item.routeName);
     if (flag) {
       setActiveParentRouteName(item.routeName);
@@ -101,4 +101,5 @@ watch(
   { immediate: true }
 );
 </script>
+
 <style scoped></style>

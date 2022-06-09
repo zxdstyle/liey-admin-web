@@ -29,7 +29,7 @@ const theme = useThemeStore();
 const routeStore = useRouteStore();
 const { routerPush } = useRouterPush();
 
-const activeKey = computed(() => route.name as string);
+const activeKey = computed(() => (route.meta?.activeMenu ? route.meta.activeMenu : route.name) as string);
 const expandedKeys = ref<string[]>([]);
 
 function handleUpdateMenu(_key: string, item: MenuOption) {
@@ -49,4 +49,5 @@ watch(
   { immediate: true }
 );
 </script>
+
 <style scoped></style>

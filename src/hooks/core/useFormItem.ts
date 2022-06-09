@@ -41,7 +41,7 @@ export function useRuleFormItem<T extends Recordable>(
 
       innerState.value = value as T[keyof T];
       nextTick(() => {
-        emit?.(`${changeEvent}:${key}`, value, ...(toRaw(unref(emitData)) || []));
+        emit?.(`${changeEvent}:${String(key)}`, value, ...(toRaw(unref(emitData)) || []));
       });
     }
   });

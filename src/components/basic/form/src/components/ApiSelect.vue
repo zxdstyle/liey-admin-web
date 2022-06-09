@@ -1,7 +1,7 @@
 <template>
   <n-select
-    v-bind="getBindVal"
     v-model:value="state"
+    v-bind="getBindVal"
     :options="getOptions"
     :loading="loading"
     @update:value="handleChange"
@@ -84,7 +84,7 @@ export default defineComponent({
 
     const getBindVal = computed(() => {
       return {
-        ...props,
+        ...omit(props, 'value'),
         ...attrs
       };
     });

@@ -214,7 +214,7 @@ declare namespace Theme {
   /** 菜单样式 */
   interface Menu {
     /** 水平模式的菜单的位置 */
-    horizontalPosition: HorizontalMenuPosition;
+    horizontalPosition: EnumType.ThemeHorizontalMenuPosition;
     /** 水平模式的菜单的位置列表 */
     horizontalPositionList: HorizontalMenuPositionList[];
   }
@@ -279,7 +279,8 @@ type GlobalBreadcrumb = import('naive-ui').DropdownOption & {
 };
 
 /** 多页签Tab的路由 */
-interface GlobalTabRoute extends Pick<import('vue-router').RouteLocationNormalizedLoaded, 'name' | 'path' | 'meta'> {
+interface GlobalTabRoute
+  extends Pick<import('vue-router').RouteLocationNormalizedLoaded, 'name' | 'fullPath' | 'meta'> {
   /** 滚动的位置 */
   scrollPosition: {
     left: number;

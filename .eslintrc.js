@@ -26,6 +26,34 @@ module.exports = {
     '@vue/eslint-config-prettier',
     '@vue/typescript/recommended'
   ],
+  overrides: [
+    {
+      files: ['*.vue'],
+      rules: {
+        'no-undef': 'off'
+      }
+    },
+    {
+      files: ['*.html'],
+      rules: {
+        'vue/comment-directive': 'off'
+      }
+    }
+  ],
+  settings: {
+    'import/resolver': {
+      alias: {
+        map: [
+          ['~', '.'],
+          ['@', './src']
+        ],
+        extensions: ['.js', '.jsx', '.mjs', '.ts', '.tsx', '.d.ts']
+      },
+      node: {
+        extensions: ['.js', '.jsx', '.mjs', '.ts', '.tsx', '.d.ts']
+      }
+    }
+  },
   rules: {
     'import/extensions': 'off',
     'import/no-extraneous-dependencies': 'off',
@@ -165,7 +193,6 @@ module.exports = {
     'vue/require-default-prop': 'off',
     'vue/multi-word-component-names': 'off',
     '@typescript-eslint/ban-types': 'off',
-    '@typescript-eslint/no-use-before-define': 'off',
     '@typescript-eslint/no-shadow': 'off',
     '@typescript-eslint/no-empty-function': 'off',
     '@typescript-eslint/ban-ts-comment': 'off',
@@ -178,6 +205,7 @@ module.exports = {
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-non-null-assertion': 'off',
     '@typescript-eslint/no-unused-vars': ['warn', { ignoreRestSiblings: true, varsIgnorePattern: '^_' }],
+    '@typescript-eslint/no-use-before-define': ['error', { classes: true, functions: false, typedefs: false }],
     'vue/html-self-closing': [
       'error',
       {
@@ -190,19 +218,5 @@ module.exports = {
         math: 'always'
       }
     ]
-  },
-  overrides: [
-    {
-      files: ['*.vue'],
-      rules: {
-        'no-undef': 'off'
-      }
-    },
-    {
-      files: ['*.html'],
-      rules: {
-        'vue/comment-directive': 'off'
-      }
-    }
-  ]
+  }
 };

@@ -17,7 +17,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import type { FollowerPlacement } from 'vueuc';
+import type { PopoverPlacement } from 'naive-ui';
 import type { EnumThemeLayoutMode } from '@/enum';
 
 interface Props {
@@ -34,7 +34,7 @@ const props = defineProps<Props>();
 type LayoutConfig = Record<
   EnumType.ThemeLayoutMode,
   {
-    placement: FollowerPlacement;
+    placement: PopoverPlacement;
     menuClass: string;
     mainClass: string;
   }
@@ -65,6 +65,7 @@ const layoutConfig: LayoutConfig = {
 
 const activeConfig = computed(() => layoutConfig[props.mode]);
 </script>
+
 <style scoped>
 .layout-checkbox__shadow {
   box-shadow: 0 1px 2.5px rgba(0, 0, 0, 0.18);

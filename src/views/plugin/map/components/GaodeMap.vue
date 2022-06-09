@@ -19,12 +19,12 @@ async function renderBaiduMap() {
     center: [114.05834626586915, 22.546789983033168],
     viewMode: '3D'
   });
-  // eslint-disable-next-line no-console
-  console.log('map: ', map);
+  window.console.log(map);
 }
 
 onMounted(() => {
   renderBaiduMap();
 });
 </script>
+
 <style scoped></style>

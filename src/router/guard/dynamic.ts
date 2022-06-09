@@ -13,7 +13,6 @@ export async function createDynamicRouteGuard(
 ) {
   const route = useRouteStore();
   const isLogin = Boolean(getToken());
-
   // 初始化权限路由
   if (!route.isInitAuthRoute) {
     // 未登录情况下直接回到登录页，登录成功后再加载权限路由
@@ -31,7 +30,7 @@ export async function createDynamicRouteGuard(
 
     if (to.name === routeName('not-found-page')) {
       // 动态路由没有加载导致被not-found-page路由捕获，等待权限路由加载好了，回到之前的路由
-      next({ path: to.fullPath, replace: true, query: to.query });
+      next({ path: to.path, replace: true, query: to.query, hash: to.hash });
       return false;
     }
   }

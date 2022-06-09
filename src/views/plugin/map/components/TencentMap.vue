@@ -1,5 +1,5 @@
 <template>
-  <div ref="domRef"></div>
+  <div ref="domRef" class="w-full h-full"></div>
 </template>
 
 <script setup lang="ts">
@@ -19,12 +19,12 @@ async function renderBaiduMap() {
     zoom: 11,
     viewMode: '3D'
   });
-  // eslint-disable-next-line no-console
-  console.log('map: ', map);
+  window.console.log(map);
 }
 
 onMounted(() => {
   renderBaiduMap();
 });
 </script>
+
 <style scoped></style>

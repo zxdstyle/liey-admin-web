@@ -1,7 +1,7 @@
 import { defineConfig, presetUno } from 'unocss';
 
 export default defineConfig({
-  exclude: ['node_modules', '.git', './stats.html'],
+  exclude: ['node_modules', '.git', 'dist', 'mock', './stats.html'],
   presets: [presetUno({ dark: 'class' })],
   shortcuts: {
     'wh-full': 'w-full h-full',
@@ -60,20 +60,8 @@ export default defineConfig({
       error: 'var(--error-color)',
       error_hover: 'var(--error-color-hover)',
       error_pressed: 'var(--error-color-pressed)',
-      error_active: 'var(--error-color-active)'
-    },
-    backgroundColor: {
+      error_active: 'var(--error-color-active)',
       dark: '#18181c'
-    },
-    transitionProperty: [
-      'width',
-      'height',
-      'background',
-      'background-color',
-      'padding-left',
-      'border-color',
-      'right',
-      'fill'
-    ]
+    }
   }
 });
