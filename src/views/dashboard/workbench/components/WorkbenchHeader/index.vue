@@ -4,7 +4,9 @@
       <div class="flex-y-center">
         <icon-custom-avatar class="text-70px" />
         <div class="pl-12px">
-          <h3 class="text-18px font-semibold">早安，{{ auth.userInfo.username }}, 今天又是充满活力的一天！</h3>
+          <h3 v-copy="auth.userInfo.username" class="text-18px font-semibold">
+            早安，{{ auth.userInfo.username }}, 今天又是充满活力的一天！
+          </h3>
           <p class="leading-30px text-[#999]">今日多云转晴，20℃ - 25℃！</p>
         </div>
       </div>
