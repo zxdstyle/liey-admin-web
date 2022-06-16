@@ -13,7 +13,7 @@
 </template>
 
 <script lang="tsx" setup>
-import { computed, onActivated, reactive } from 'vue';
+import { computed, onMounted, reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import { Icon } from '@iconify/vue';
 import { TableActionHandler } from '@/components/basic/table';
@@ -91,7 +91,7 @@ const getFormBind = computed(() => {
   };
 });
 
-onActivated(() => reload());
+onMounted(() => reload());
 </script>
 
 <style lang="less" scoped></style>

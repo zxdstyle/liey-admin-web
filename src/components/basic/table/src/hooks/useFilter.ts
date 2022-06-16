@@ -7,7 +7,6 @@ export default function useFilter(reload: (opt?: Recordable) => void) {
 
   const handleFilterChange = (filters: DataTableFilterState) => {
     filterParams = {};
-    console.log(filters);
     Object.keys(filters).forEach(key => {
       let val = filters[key];
       if (!val || isEmpty(val)) return;

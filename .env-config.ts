@@ -4,7 +4,7 @@ type ServiceEnv = Record<EnvType, EnvConfig>;
 /** 环境配置 */
 const serviceEnvConfig: ServiceEnv = {
   dev: {
-    url: 'http://api.liey.cn',
+    url: 'http://localhost:8080',
     proxy: '/api'
   },
   test: {

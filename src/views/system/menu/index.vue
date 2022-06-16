@@ -14,7 +14,7 @@
 </template>
 
 <script lang="tsx" setup>
-import { computed, h, onActivated, reactive } from 'vue';
+import { computed, h, onMounted, reactive } from 'vue';
 import { NButton } from 'naive-ui';
 import { Icon } from '@iconify/vue';
 import { iconifyRender } from '@/utils';
@@ -135,7 +135,7 @@ const getFormBind = computed(() => {
   };
 });
 
-onActivated(() => reload());
+onMounted(() => reload());
 </script>
 
 <style lang="less" scoped></style>

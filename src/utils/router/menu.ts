@@ -11,7 +11,7 @@ function addPartialProps(menuItem: GlobalMenuOption, icon?: string, children?: G
   if (icon) {
     Object.assign(item, { icon: iconifyRender(icon) });
   }
-  if (children) {
+  if (children && children.length > 0) {
     Object.assign(item, { children });
   }
   return item;
@@ -45,7 +45,6 @@ export function transformAuthRouteToMenu(routes: AuthRoute.Route[]): GlobalMenuO
       globalMenu.push(menuItem);
     }
   });
-
   return globalMenu;
 }
 
