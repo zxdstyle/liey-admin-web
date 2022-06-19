@@ -51,6 +51,9 @@ export const useAuthStore = defineStore('auth-store', {
       const loginSuccess = await this.loginByToken(backendToken);
 
       if (loginSuccess) {
+				const route = useRouteStore();
+				await route.initAuthRoute();
+
         // 跳转登录后的地址
         toLoginRedirect();
 

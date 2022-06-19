@@ -5,14 +5,13 @@
       <menu-collapse v-if="showMenuCollapse" />
       <global-breadcrumb v-if="theme.header.crumb.visible" />
     </div>
-    <div v-else class="flex-1-hidden flex-y-center h-full" :style="{ justifyContent: theme.menu.horizontalPosition }">
-      <header-menu />
-    </div>
+    <header-menu v-else />
     <div class="flex justify-end h-full">
       <global-search />
       <github-site />
       <full-screen />
       <theme-mode />
+      <system-message />
       <user-avatar />
     </div>
   </dark-mode-container>
@@ -29,7 +28,8 @@ import {
   GithubSite,
   FullScreen,
   ThemeMode,
-  UserAvatar
+  UserAvatar,
+  SystemMessage
 } from './components';
 
 interface Props {
