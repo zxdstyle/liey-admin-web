@@ -9,8 +9,8 @@ export default class Resource<T> {
     return request.get<T[]>(`/api/${this.version}/${this.resource}`, { params });
   };
 
-  Show = (id: number | string) => {
-    return request.get<T>(`/api/${this.version}/${this.resource}/${id}`);
+  Show = (id: number | string, params: Recordable = {}) => {
+    return request.get<T>(`/api/${this.version}/${this.resource}/${id}`, { params });
   };
 
   Update = (id: number, data: Recordable = {}) => {

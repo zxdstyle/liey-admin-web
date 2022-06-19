@@ -20,8 +20,8 @@ import { TableActionHandler } from '@/components/basic/table';
 import ApiRole from '@/service/api/scaffold/role';
 import { useModal } from '@/components/basic/modal';
 import useBasicDialog from '@/hooks/common/useDialog';
-import RoleForm from './form.vue';
-import { useIndex } from './hooks';
+import RoleForm from '../form.vue';
+import { useIndex } from '../hooks';
 
 const [registerModal, { openModal, setModalProps, closeModal }] = useModal();
 

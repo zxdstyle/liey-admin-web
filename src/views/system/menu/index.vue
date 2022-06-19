@@ -10,6 +10,10 @@
     <BasicModal style="width: 900px" @register="registerModal">
       <MenuForm v-bind="getFormBind" />
     </BasicModal>
+
+    <BasicDrawer @register="registerDrawer">
+      <Dispatch :menu-id="state.model.id" />
+    </BasicDrawer>
   </n-card>
 </template>
 
@@ -23,12 +27,25 @@ import { BasicModal, useModal } from '@/components/basic/modal';
 import { ApiSwitch } from '@/components/basic/form';
 import ApiMenu from '@/service/api/scaffold/menu';
 import useBasicDialog from '@/hooks/common/useDialog';
+import { BasicDrawer, useDrawer } from '@/components/basic/drawer';
 import MenuForm from './form.vue';
+import Dispatch from './components/dispatch.vue';
+
+interface State {
+  model: Api.Menu;
+}
 
 const [registerModal, { openModal, setModalProps, closeModal }] = useModal();
 
+const [registerDrawer, { openDrawer }] = useDrawer({
+  width: '40%',
+  type: 'classic',
+  content: { title: '授权', bodyStyle: { padding: '32px', backgroundColor: 'rgb(253, 254, 255)' } }
+});
+
 const actions: TableActionOption = [
   { key: 'edit', label: '编辑', icon: iconifyRender('ep:edit', '', 18) },
+  { key: 'dispatch', label: '授权', icon: iconifyRender('codicon:shield', '', 18) },
   { type: 'divider' },
   {
     key: 'delete',
@@ -93,8 +110,8 @@ const [registerTable, { reload }] = useTable<Api.Menu>({
   searchInfo: { 'order.sort_num': 'desc', 'order.id': 'desc' }
 });
 
-const state = reactive({
-  model: {}
+const state = reactive<State>({
+  model: {} as Api.Menu
 });
 
 const openEditModal = () => {
@@ -102,25 +119,29 @@ const openEditModal = () => {
   openModal();
 };
 
-const handleDeleteAdmin = async (row: Api.Menu) => {
+const handleDelete = async (row: Api.Menu) => {
   await ApiMenu.Destroy(row.id);
+  await reload();
 };
 
 function handleTableAction(key: string, row: Api.Menu) {
+  state.model = row;
   switch (key) {
     case 'edit':
-      state.model = row;
       openEditModal();
       break;
+    case 'dispatch':
+      openDrawer();
+      break;
     case 'delete':
-      warning('子菜单将被一起删除，是否确认删除该菜单？', () => handleDeleteAdmin(row));
+      warning('子菜单将被一起删除，是否确认删除该菜单？', () => handleDelete(row));
       break;
     default:
   }
 }
 
 const openCreateModal = () => {
-  state.model = {};
+  state.model = {} as Api.Menu;
   openModal();
   setModalProps({ title: '新增菜单' });
 };

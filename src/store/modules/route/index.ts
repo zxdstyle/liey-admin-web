@@ -82,19 +82,25 @@ export const useRouteStore = defineStore('route-store', {
       if (routeKey === 'root' || routeKey === 'not-found-page') {
         throw Error('routeKey的值不能为root或者not-found-page');
       }
+
       const rootRoute: AuthRoute.Route = { ...ROOT_ROUTE, redirect: transformRouteNameToRoutePath(routeKey) };
       const rootRouteName: AuthRoute.RouteKey = 'root';
       router.removeRoute(rootRouteName);
       const rootVueRoute = transformAuthRouteToVueRoute(rootRoute)[0];
+
       router.addRoute(rootVueRoute);
     },
     /** 初始化动态路由 */
     async initDynamicRoute() {
-      const { data } = await fetchUserRoutes();
-      if (data) {
-        this.routeHomeName = data.home;
-        this.handleUpdateRootRedirect(data.home);
-        this.handleAuthRoutes(data.routes);
+      try {
+        const { data } = await fetchUserRoutes();
+        if (data) {
+          this.routeHomeName = data.home;
+          this.handleUpdateRootRedirect(data.home);
+          this.handleAuthRoutes(data.routes);
+        }
+      } catch (e) {
+        window.console.error(e);
       }
     },
     /** 初始化静态路由 */

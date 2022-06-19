@@ -7,7 +7,6 @@
 export function getBreadcrumbByRouteKey(activeKey: string, menus: GlobalMenuOption[], rootPath: string) {
   const breadcrumbMenu = getBreadcrumbMenu(activeKey, menus);
   const breadcrumb = breadcrumbMenu.map(item => transformBreadcrumbMenuToBreadcrumb(item, rootPath));
-  console.log(breadcrumb);
   return breadcrumb;
 }
 
@@ -35,11 +34,11 @@ function getBreadcrumbMenu(activeKey: string, menus: GlobalMenuOption[]) {
  */
 function getBreadcrumbMenuItem(activeKey: string, menu: GlobalMenuOption) {
   const breadcrumbMenu: GlobalMenuOption[] = [];
-  if (activeKey === menu.routeName) {
+  if (activeKey.includes(menu.routeName)) {
     breadcrumbMenu.push(menu);
   }
-  if (activeKey.includes(menu.routeName) && menu.children && menu.children.length) {
-    breadcrumbMenu.push(menu);
+
+  if (menu.children && menu.children.length) {
     breadcrumbMenu.push(
       ...menu.children.map(item => getBreadcrumbMenuItem(activeKey, item as GlobalMenuOption)).flat(1)
     );

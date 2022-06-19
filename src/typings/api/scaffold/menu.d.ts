@@ -13,5 +13,7 @@ declare namespace Api {
     created_at?: string;
     updated_at?: string;
     children?: Menu[];
+
+    roles?: Role[];
   }
 }

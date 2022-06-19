@@ -160,7 +160,6 @@ export function transformAuthRouteToVueRoute(item: AuthRoute.Route) {
       const parentPath = `${itemRoute.path}-parent` as AuthRoute.SingleRouteParentPath;
 
       const layout = item.meta.singleLayout === 'basic' ? getLayoutComponent('basic') : getLayoutComponent('blank');
-
       const parentRoute: RouteRecordRaw = {
         path: parentPath,
         component: layout,
@@ -177,10 +176,10 @@ export function transformAuthRouteToVueRoute(item: AuthRoute.Route) {
     const children = (item.children as AuthRoute.Route[]).map(child => transformAuthRouteToVueRoute(child)).flat();
 
     // 找出第一个不为多级路由中间级的子路由路径作为重定向路径
-    // const redirectPath: AuthRoute.RoutePath = (children.find(v => !v.meta?.multi)?.path || '/') as AuthRoute.RoutePath;
-    // if (redirectPath === '/') {
-    //   window.console.error('该多级路由没有有效的子路径', item);
-    // }
+    const redirectPath: AuthRoute.RoutePath = (children.find(v => !v.meta?.multi)?.path || '/') as AuthRoute.RoutePath;
+    if (redirectPath === '/') {
+      window.console.error('该多级路由没有有效的子路径', item);
+    }
 
     if (item.component === 'multi') {
       // 多级路由，将子路由提取出来变成同级
@@ -189,7 +188,7 @@ export function transformAuthRouteToVueRoute(item: AuthRoute.Route) {
     } else {
       itemRoute.children = children;
     }
-    // itemRoute.redirect = redirectPath;
+    itemRoute.redirect = redirectPath;
   }
 
   resultRoute.push(itemRoute);

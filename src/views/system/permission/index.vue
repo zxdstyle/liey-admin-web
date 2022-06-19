@@ -26,18 +26,11 @@ const { warning } = useBasicDialog();
 const [registerModal, { openModal, setModalProps, closeModal }] = useModal();
 
 interface State {
-  model: Api.Permission;
+  model: Partial<Api.Permission>;
 }
 
 const state = reactive<State>({
-  model: {
-    id: 0,
-    name: '',
-    slug: '',
-    parent_id: 0,
-    sort_num: 0,
-    rules: []
-  }
+  model: {}
 });
 
 const openEditModal = (row: Api.Permission) => {
@@ -47,14 +40,7 @@ const openEditModal = (row: Api.Permission) => {
 };
 
 const openCreateModal = () => {
-  state.model = {
-    id: 0,
-    name: '',
-    slug: '',
-    parent_id: 0,
-    sort_num: 0,
-    rules: []
-  };
+  state.model = {};
   openModal();
   setModalProps({ title: '新增权限' });
 };

@@ -2,9 +2,14 @@
 declare namespace Api {
   interface Permission {
     id: number;
-    name: string;
-    slug: string;
     parent_id: number;
+    slug: string;
+    type: string;
+    path: string;
+    title: string;
+    icon: string;
+    require_auth: boolean;
+    keepalive: boolean;
     sort_num: number;
     rules: PermissionRule[];
 

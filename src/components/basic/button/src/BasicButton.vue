@@ -2,7 +2,7 @@
   <NButton v-bind="getBindValue" :class="getButtonClass" @click="onClick">
     <slot></slot>
     <template #icon>
-      <Icon v-if="icon" :icon="icon" :size="iconSize" />
+      <Icon v-if="icon" :icon="icon" :style="{ fontSize: iconSize + 'px' }" />
     </template>
   </NButton>
 </template>

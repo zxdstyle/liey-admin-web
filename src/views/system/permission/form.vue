@@ -5,7 +5,7 @@
         <ApiTreeSelect v-model:value="modelValue.parent_id" v-bind="getTreeSelect" />
       </n-form-item-gi>
       <n-form-item-gi span="18" label="名称" path="name">
-        <n-input v-model:value="modelValue.name" />
+        <n-input v-model:value="modelValue.title" />
       </n-form-item-gi>
       <n-form-item-gi span="18" label="标识" path="slug">
         <n-input v-model:value="modelValue.slug" />
@@ -58,11 +58,13 @@ import ApiPermission from '@/service/api/scaffold/permission';
 import { FormActionType } from '@/components/basic/form/src/types/form';
 import { ApiTreeSelect } from '@/components/basic/form';
 
+type PermissionOption = Pick<Api.Permission, 'id' | 'title' | 'children'>;
+
 const message = useMessage();
 const permissionForm = ref<Nullable<FormActionType>>(null);
 const props = defineProps({
   model: {
-    type: Object as PropType<Api.Permission>,
+    type: Object as PropType<Partial<Api.Permission>>,
     default: () => {}
   }
 });
@@ -106,7 +108,7 @@ const rules = {
   rules: { required: true, message: '请输入权限规则' }
 };
 
-const modelValue = computed<Api.Permission>({
+const modelValue = computed<Partial<Api.Permission>>({
   get: () => {
     const val = props.model;
     if (!val.rules) {
@@ -143,16 +145,12 @@ const getTreeSelect = {
   api: ApiPermission.TreeData,
   keyField: 'id',
   labelField: 'name',
-  afterFetch: (data: Api.Permission[]): Api.Permission[] => {
+  afterFetch: (data: Api.Permission[]): PermissionOption[] => {
     return [
       {
         id: 0,
-        name: '顶级权限',
-        children: data,
-        parent_id: 0,
-        slug: '',
-        sort_num: 0,
-        rules: []
+        title: '顶级权限',
+        children: data
       }
     ];
   }
