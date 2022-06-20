@@ -2,12 +2,7 @@ import type { Component } from 'vue';
 
 type ViewComponent = Record<string, () => Promise<Component>>;
 
-const importIndexViews = import.meta.glob('./**/index.vue');
-const importDetailViews = import.meta.glob('./**/detail.vue');
-const importCreateViews = import.meta.glob('./**/create.vue');
-const importEditViews = import.meta.glob('./**/edit.vue');
-
-const importViews = { ...importIndexViews, ...importDetailViews, ...importCreateViews, ...importEditViews };
+const importViews = import.meta.glob('./**/index.vue');
 
 const COMPONENTS_KEY = 'components';
 const PREFIX = './';

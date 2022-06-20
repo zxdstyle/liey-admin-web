@@ -26,7 +26,6 @@ const role = ref<Nullable<Api.Role>>(null);
 async function fetch() {
   const { data } = await ApiRole.Show(route.params.id as string);
   role.value = data;
-  console.log(data);
 }
 
 onMounted(() => fetch());

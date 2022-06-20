@@ -40,7 +40,7 @@ const [registerModal, { openModal, setModalProps, closeModal }] = useModal();
 const [registerDrawer, { openDrawer }] = useDrawer({
   width: '40%',
   type: 'classic',
-  content: { title: '授权', bodyStyle: { padding: '32px', backgroundColor: 'rgb(253, 254, 255)' } }
+  content: { title: '授权', bodyStyle: { padding: '32px' } }
 });
 
 const actions: TableActionOption = [

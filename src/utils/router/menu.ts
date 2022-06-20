@@ -47,9 +47,12 @@ export function transformAuthRouteToMenu(routes: AuthRoute.Route[]): GlobalMenuO
         routePath: path
       },
       icon: meta.icon,
-      customIcon: meta.customIcon,
-      children: menuChildren
+      customIcon: meta.customIcon
     });
+
+    if (menuChildren && menuChildren.length > 0) {
+      menuItem.children = menuChildren;
+    }
 
     if (!hideInMenu(route)) {
       globalMenu.push(menuItem);
