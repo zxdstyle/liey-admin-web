@@ -8,11 +8,11 @@ const serviceEnvConfig: ServiceEnv = {
     proxy: '/api'
   },
   test: {
-    url: 'http://api.liey.cn',
+    url: '//api.liey.cn',
     proxy: '/api'
   },
   prod: {
-    url: 'http://api.liey.cn',
+    url: '//api.liey.cn',
     proxy: '/api'
   }
 };
