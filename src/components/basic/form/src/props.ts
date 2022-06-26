@@ -1,6 +1,5 @@
 import type { CSSProperties, PropType } from 'vue';
 import type { ButtonProps, RowProps } from 'naive-ui';
-import type { TableActionType } from '@/components/basic/table';
 import { propTypes } from '@/utils/common/propType';
 import type { ColEx } from './types';
 import type { FieldMapToTime, FormSchema } from './types/form';
@@ -88,9 +87,6 @@ export const basicProps = {
   labelCol: Object as PropType<Partial<ColEx>>,
 
   layout: propTypes.oneOf(['horizontal', 'vertical', 'inline']).def('horizontal'),
-  tableAction: {
-    type: Object as PropType<TableActionType<any>>
-  },
 
   wrapperCol: Object as PropType<Partial<ColEx>>,
 

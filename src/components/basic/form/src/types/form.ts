@@ -1,6 +1,5 @@
 import type { CSSProperties, VNode } from 'vue';
 import type { FormItemRule, FormProps as NFormProps, RowProps, GridItemProps } from 'naive-ui';
-import type { TableActionType } from '@/components/basic/table/src/types/table';
 import type { ComponentType } from '@/components/basic/form/src/types/index';
 import type { FormItem, NamePath } from '@/components/basic/form/src/types/formItem';
 
@@ -162,12 +161,7 @@ export interface FormSchema {
   component: ComponentType;
   // Component parameters
   componentProps?:
-    | ((opt: {
-        schema: FormSchema;
-        tableAction: TableActionType<any>;
-        formActionType: FormActionType;
-        formModel: Recordable;
-      }) => Recordable)
+    | ((opt: { schema: FormSchema; formActionType: FormActionType; formModel: Recordable }) => Recordable)
     | object;
   // Required
   required?: boolean | ((renderCallbackParams: RenderCallbackParams) => boolean);

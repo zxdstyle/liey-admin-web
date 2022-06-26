@@ -98,10 +98,12 @@ export const useRouteStore = defineStore('route-store', {
           this.routeHomeName = data.home;
           this.handleUpdateRootRedirect(data.home);
           this.handleAuthRoutes(data.routes);
+          return true;
         }
       } catch (e) {
         window.console.error(e);
       }
+      return false;
     },
     /** 初始化静态路由 */
     async initStaticRoute() {
@@ -111,20 +113,25 @@ export const useRouteStore = defineStore('route-store', {
     },
     /** 初始化权限路由 */
     async initAuthRoute() {
-      const { initHomeTab } = useTabStore();
-      const { id } = getUserInfo();
-      if (!id) return;
+      try {
+        const { initHomeTab } = useTabStore();
+        const { id } = getUserInfo();
+        if (!id) return;
 
-      const isDynamicRoute = this.authRouteMode === 'dynamic';
-      if (isDynamicRoute) {
-        await this.initDynamicRoute();
-      } else {
-        await this.initStaticRoute();
+        const isDynamicRoute = this.authRouteMode === 'dynamic';
+        let isInit = false;
+        if (isDynamicRoute) {
+          isInit = await this.initDynamicRoute();
+        } else {
+          isInit = true;
+        }
+
+        initHomeTab(this.routeHomeName, router);
+
+        this.isInitAuthRoute = isInit;
+      } catch (e) {
+        window.console.error(e);
       }
-
-      initHomeTab(this.routeHomeName, router);
-
-      this.isInitAuthRoute = true;
     }
   }
 });

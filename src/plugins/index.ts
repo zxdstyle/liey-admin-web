@@ -1,9 +1,9 @@
 import { App } from 'vue';
 import setupAssets from './assets';
+import setupVxeTable from './vxe-table';
 
-// @ts-ignore
 function setupPlugins(app: App) {
-  app.version;
+  setupVxeTable(app);
 }
 
 export { setupAssets, setupPlugins };

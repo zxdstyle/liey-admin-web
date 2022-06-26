@@ -1,107 +1,97 @@
 <template>
-  <div ref="wrapRef" class="h-full py-2 flex flex-col">
-    <TableHeader>
-      <template #left><slot name="left"></slot></template>
-      <template #toolbar><slot name="toolbar"></slot></template>
-    </TableHeader>
-    <div class="h-full">
-      <n-data-table ref="tableElRef" v-bind="getBindValues" :style="resizeStyle" />
-    </div>
-  </div>
+  <Grid v-bind="getBindVal">
+    <template #empty>
+      <GetCustomEmpty v-bind="emptyBind" />
+    </template>
+  </Grid>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, ref, toRaw, unref } from 'vue';
-import { useDataSource } from '@/components/basic/table/src/hooks/useDataSource';
-import { usePagination } from '@/components/basic/table/src/hooks/usePagination';
-import TableHeader from './components/TableHeader.vue';
-import { useLoading } from './hooks/useLoading';
-import type { BasicTableProps, TableActionType } from './types/table';
-import { createTableContext } from './hooks/useTableContext';
+<script lang="tsx" setup>
+import { computed, onMounted, ref, unref } from 'vue';
+import XEUtils from 'xe-utils';
+import { VXETable, Grid, VxeGridProps, VxeTableEvents } from 'vxe-table';
+import zhCN from 'vxe-table/es/locale/lang/zh-CN';
+import { merge, omit } from 'lodash-es';
+import { useLoading } from '@/hooks';
+import useDataSource from './hooks/useDataSource';
+import useEmpty from './hooks/useEmpty';
+import { BasicTableInstance, BasicTableProps } from './types/table';
 
-export default defineComponent({
-  name: 'BasicTable',
-  components: { TableHeader },
-  emits: ['register'],
-  setup(props, { attrs, emit }) {
-    const wrapRef = ref(null);
-    const tableElRef = ref(null);
-    const tableData = ref<Recordable[]>([]);
+const propsRef = ref<Partial<BasicTableProps>>({});
 
-    const innerPropsRef = ref<Partial<BasicTableProps<any>>>();
-
-    const getProps = computed(() => {
-      return { ...props, ...unref(innerPropsRef) } as BasicTableProps<any>;
-    });
-
-    function setProps(props: Partial<BasicTableProps<any>>) {
-      innerPropsRef.value = { ...unref(innerPropsRef), ...props };
-    }
-
-    const { setLoading, getLoading } = useLoading(getProps);
-
-    const { getPaginationInfo, setPagination } = usePagination(getProps);
-
-    const {
-      reload,
-      setRowData,
-      setTableData,
-      setFieldData,
-      getDataSourceRef,
-      handleSorterChange,
-      handlePageChange,
-      handlePageSizeChange,
-      handleFilterChange
-    } = useDataSource(getProps, {
-      setLoading,
-      tableData,
-      setPagination,
-      getPaginationInfo
-    });
-
-    const getBindValues = computed(() => {
-      const data = unref(getDataSourceRef);
-      const propsData: Recordable = {
-        rowKey: (row: Recordable) => row.id,
-        pagination: toRaw(unref(getPaginationInfo)),
-        loading: unref(getLoading),
-        remote: true,
-        tableLayout: 'fixed',
-        striped: true,
-        flexHeight: true,
-        'onUpdate:page': handlePageChange,
-        'onUpdate:pageSize': handlePageSizeChange,
-        'onUpdate:sorter': handleSorterChange,
-        'onUpdate:filters': handleFilterChange,
-        ...attrs,
-        ...unref(getProps),
-        data
-      };
-      return propsData;
-    });
-
-    const tableAction: TableActionType<any> = {
-      reload,
-      setProps,
-      setTableData,
-      setRowData,
-      setFieldData
-    };
-
-    const resizeStyle = computed(() => {
-      if (unref(getBindValues).flexHeight) {
-        return { height: '100%' };
-      }
-      return {};
-    });
-
-    createTableContext({ ...tableAction, wrapRef, getBindValues });
-
-    emit('register', tableAction);
-
-    return { wrapRef, tableElRef, getBindValues, resizeStyle };
-  }
+VXETable.setup({
+  i18n: (key, args) => XEUtils.toFormatString(XEUtils.get(zhCN, key), args)
 });
+
+const { loading, startLoading, endLoading } = useLoading();
+
+const emit = defineEmits(['register']);
+
+const onEditClosed: VxeTableEvents.EditClosed = ({ row, column, $table }) => {
+  if (!$table.isUpdateByRow(row, column.field)) {
+    return;
+  }
+
+  const { onUpdate } = unref(propsRef);
+  if (!onUpdate) {
+    $table.revertData(row, column.field);
+    console.error('缺少 `onUpdate` 回调');
+    return;
+  }
+
+  startLoading();
+  onUpdate(row, column.field, row[column.field])
+    .then(() => {
+      $table.reloadRow(row, null, column.field);
+    })
+    .catch(() => $table.revertData(row, column.field))
+    .finally(() => endLoading());
+};
+
+const { onQuery } = useDataSource(unref(propsRef));
+
+const getBindVal = computed<VxeGridProps>(() => {
+  return {
+    round: true,
+    stripe: true,
+    size: 'medium',
+    autoResize: true,
+    loading: loading.value,
+    filterConfig: { remote: true },
+    editConfig: { trigger: 'click', mode: 'cell', showStatus: true },
+    proxyConfig: {
+      sort: true,
+      filter: true,
+      form: true,
+      autoLoad: true,
+      props: { result: 'data', list: 'data', total: 'meta.total' },
+      ajax: {
+        query: params => onQuery(params)
+      }
+    },
+    sortConfig: {
+      remote: true,
+      multiple: true,
+      chronological: true
+    },
+    toolbarConfig: { refresh: true, resizable: true },
+    ...omit(unref(propsRef), ['empty', 'api', 'onUpdate']),
+    onEditClosed
+  };
+});
+
+const { GetCustomEmpty, emptyBind } = useEmpty(unref(propsRef));
+
+async function setProps(props: Partial<BasicTableProps>) {
+  propsRef.value = merge(unref(propsRef) || {}, props);
+}
+
+const instance: BasicTableInstance = {
+  setProps,
+  reload: () => {}
+};
+
+onMounted(() => emit('register', instance));
 </script>
 
 <style lang="less" scoped></style>
