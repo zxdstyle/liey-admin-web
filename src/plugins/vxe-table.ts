@@ -13,6 +13,7 @@ import {
   FormGather,
   Button,
   Input,
+  Select,
   Toolbar
 } from 'vxe-table';
 import setupRenders from '@/plugins/renders';
@@ -29,6 +30,7 @@ export default function setupVxeTable(app: App) {
   app.use(Button);
   app.use(Toolbar);
   app.use(Input);
+  app.use(Select);
   app.use(Form);
   app.use(FormItem);
   app.use(FormGather);

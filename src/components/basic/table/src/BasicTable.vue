@@ -59,6 +59,11 @@ const getBindVal = computed<VxeGridProps>(() => {
     loading: loading.value,
     filterConfig: { remote: true },
     editConfig: { trigger: 'click', mode: 'cell', showStatus: true },
+    pagerConfig: {
+      pageSize: 15,
+      pageSizes: [15, 20, 50, 100, 200, 500, 1000],
+      layouts: ['PrevJump', 'PrevPage', 'JumpNumber', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']
+    },
     proxyConfig: {
       sort: true,
       filter: true,
@@ -94,4 +99,8 @@ const instance: BasicTableInstance = {
 onMounted(() => emit('register', instance));
 </script>
 
-<style lang="less" scoped></style>
+<style scoped>
+.vxe-grid.is--loading:before {
+  background: transparent;
+}
+</style>
