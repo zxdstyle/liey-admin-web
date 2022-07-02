@@ -1,11 +1,16 @@
 import { VxeGridPropTypes, VxeTableDefines } from 'vxe-table';
+import { forIn } from 'lodash-es';
 import { BasicTableProps } from '../types/table';
 
 export default function useDataSource(props: Partial<BasicTableProps>) {
   const resolveSearch = (params: Recordable) => {
-    return {
-      ...params
-    };
+    const res: Recordable = {};
+    forIn(params, (value, key) => {
+      if (value) {
+        res[`where.${key}.eq`] = value;
+      }
+    });
+    return res;
   };
 
   const resolveFilter = (filters: VxeTableDefines.FilterCheckedParams[]) => {

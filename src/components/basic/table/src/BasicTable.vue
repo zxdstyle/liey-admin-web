@@ -62,6 +62,7 @@ const getBindVal = computed<VxeGridProps>(() => {
     pagerConfig: {
       pageSize: 15,
       pageSizes: [15, 20, 50, 100, 200, 500, 1000],
+      autoHidden: true,
       layouts: ['PrevJump', 'PrevPage', 'JumpNumber', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']
     },
     proxyConfig: {

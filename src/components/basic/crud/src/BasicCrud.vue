@@ -22,9 +22,34 @@ const [registerBasicTable] = useBasicTable({
     },
     { field: 'created_at', title: '创建时间' }
   ],
-  formConfig: {
+  filter: {
     enabled: true,
-    items: [{ field: 'name', title: '角色名称', itemRender: { name: '$input' } }]
+    items: [
+      {
+        field: 'name',
+        title: '角色名称',
+        itemRender: { name: '$input', props: { placeholder: '请输入角色名称筛选' } },
+        span: 5
+      },
+      {
+        field: 'slug',
+        title: '角色标识',
+        itemRender: { name: '$input', props: { placeholder: '请输入角色标识筛选' } },
+        span: 5
+      },
+      {
+        span: 24,
+        align: 'right',
+        collapseNode: true,
+        itemRender: {
+          name: '$buttons',
+          children: [
+            { props: { type: 'submit', content: '搜索', status: 'primary' } },
+            { props: { type: 'reset', content: '重置' } }
+          ]
+        }
+      }
+    ]
   },
   api: ApiRole.Index,
   onUpdate: (row, field, value) => ApiRole.Update(row.id, { field: value })
