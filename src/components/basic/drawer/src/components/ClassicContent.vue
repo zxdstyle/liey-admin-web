@@ -1,5 +1,5 @@
 <template>
-  <div class="p-32" :style="getBodyStyle">
+  <div class="p-3" :style="getBodyStyle">
     <slot name="header">
       <div class="flex items-center text-zinc-500">
         <Icon
@@ -12,7 +12,7 @@
         <h2 class="text-2xl text-zinc-500">{{ title }}</h2>
       </div>
     </slot>
-    <div class="pt-3 pl-13">
+    <div class="pt-3 pl-13" :style="getBodyContentStyle">
       <slot></slot>
     </div>
   </div>
@@ -34,6 +34,11 @@ const close = () => emit('close');
 const getBodyStyle = computed(() => {
   return {
     ...props.bodyStyle
+  };
+});
+const getBodyContentStyle = computed(() => {
+  return {
+    ...props.bodyContentStyle
   };
 });
 </script>

@@ -1,18 +1,20 @@
 import { nextTick, onUnmounted, ref, unref, watch } from 'vue';
+import { merge } from 'lodash-es';
 import { getDynamicProps } from '@/utils';
 
-export default function useRegisterComp<T, N extends RegisterComp<T>>(props: T) {
+export function useRegisterComp<T, N extends RegisterComp<T>>(props: T) {
   const instanceRef = ref<Partial<N>>({});
   const loadedRef = ref<Nullable<boolean>>(false);
 
-  const register = (instance: N): void => {
+  const register = (instance: N) => {
+    if (unref(loadedRef) && instance === unref(instanceRef)) {
+      return;
+    }
+
     onUnmounted(() => {
       instanceRef.value = null;
       loadedRef.value = null;
     });
-    if (unref(loadedRef) && instance === unref(instanceRef)) {
-      return;
-    }
 
     instanceRef.value = instance;
     loadedRef.value = true;
@@ -41,4 +43,14 @@ export default function useRegisterComp<T, N extends RegisterComp<T>>(props: T) 
   }
 
   return { register, getInstance };
+}
+
+export function useInnerRegisterComp<T>() {
+  const propsRef = ref<Partial<T>>({});
+
+  async function setProps(formProps: Partial<T>): Promise<void> {
+    propsRef.value = merge(unref(propsRef) || {}, formProps);
+  }
+
+  return { propsRef, setProps };
 }

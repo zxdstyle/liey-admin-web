@@ -1,59 +1,75 @@
-import { VxeGridPropTypes, VxeTableDefines } from 'vxe-table';
-import { forIn } from 'lodash-es';
+import { ComputedRef, onMounted, ref, unref } from 'vue';
+import { PaginationProps } from 'naive-ui';
+import { get, isFunction } from 'lodash-es';
 import { BasicTableProps } from '../types/table';
 
-export default function useDataSource(props: Partial<BasicTableProps>) {
-  const resolveSearch = (params: Recordable) => {
-    const res: Recordable = {};
-    forIn(params, (value, key) => {
-      if (value) {
-        res[`where.${key}.eq`] = value;
+interface actionType {
+  emit: (e: 'fetch-error', error: Error) => void;
+  startLoading: () => void;
+  endLoading: () => void;
+  getPaginationInfo: ComputedRef<boolean | PaginationProps>;
+}
+
+export default function useDataSource(
+  props: ComputedRef<Partial<BasicTableProps>>,
+  { emit, startLoading, endLoading, getPaginationInfo }: actionType
+) {
+  const dataSourceRef = ref<Recordable[]>([]);
+  const rawDataSourceRef = ref<Recordable>({});
+
+  async function fetch(opt?: Recordable) {
+    const { api, beforeFetch, afterFetch } = unref(props);
+
+    if (!api || !isFunction(api)) return;
+
+    try {
+      startLoading();
+
+      const { page = 1, pageSize = 20 } = unref(getPaginationInfo) as PaginationProps;
+
+      let params: Recordable = {
+        page,
+        pageSize,
+        ...opt
+      };
+
+      if (beforeFetch && isFunction(beforeFetch)) {
+        params = (await beforeFetch(params)) || params;
       }
-    });
-    return res;
-  };
 
-  const resolveFilter = (filters: VxeTableDefines.FilterCheckedParams[]) => {
-    const res: Recordable = {};
-    filters.forEach(filter => {
-      const { property, values } = filter;
-      if (values.length === 1) {
-        // eslint-disable-next-line prefer-destructuring
-        res[`where.${property}.eq`] = values[0];
+      const res = await api(params);
+      rawDataSourceRef.value = res;
+
+      const isArrayResult = Array.isArray(res);
+
+      let resultItems: Recordable[] = isArrayResult ? res : get(res, 'data');
+      // const resultTotal: number = isArrayResult ? res.length : get(res, 'total');
+
+      if (afterFetch && isFunction(afterFetch)) {
+        resultItems = (await afterFetch(resultItems)) || resultItems;
       }
-      if (values.length > 1) {
-        res[`where.${property}.in`] = values;
-      }
-    });
-    return res;
-  };
 
-  const resolveSort = (sorts: VxeGridPropTypes.ProxyAjaxQuerySortCheckedParams[]) => {
-    const res: Recordable = {};
-    sorts.forEach(sort => {
-      const { column, order } = sort;
-      res[`order.${column.field}`] = order;
-    });
-    return res;
-  };
+      dataSourceRef.value = resultItems;
+    } catch (error) {
+      emit('fetch-error', error as Error);
+    } finally {
+      endLoading();
+    }
+  }
 
-  const onQuery = (params: VxeGridPropTypes.ProxyAjaxQueryParams) => {
-    const { form, page, sorts, filters } = params;
+  function getRawDataSource<T = Recordable>() {
+    return rawDataSourceRef.value as T;
+  }
 
-    const queryParams = {
-      ...resolveSearch(form),
-      ...resolveFilter(filters),
-      ...resolveSort(sorts),
-      page: page.currentPage,
-      pageSize: page.pageSize
-    };
+  async function reload(opt?: Recordable) {
+    await fetch(opt);
+  }
 
-    return new Promise(resolve => {
-      if (props && props.api) {
-        resolve(props.api(queryParams));
-      }
-    });
-  };
+  onMounted(() => {
+    setTimeout(() => {
+      unref(props).immediate && fetch();
+    }, 16);
+  });
 
-  return { onQuery };
+  return { fetch, getRawDataSource, dataSourceRef, reload };
 }

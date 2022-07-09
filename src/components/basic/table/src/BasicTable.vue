@@ -1,107 +1,91 @@
 <template>
-  <Grid v-bind="getBindVal">
-    <template #empty>
-      <GetCustomEmpty v-bind="emptyBind" />
-    </template>
-  </Grid>
+  <n-card ref="wrapRef" class="h-full rounded-xl">
+    <Search v-bind="getSearchBindVal" />
+
+    <TableHeader v-bind="getHeaderProps" />
+
+    <NDataTable v-bind="getBindValues" />
+  </n-card>
 </template>
 
-<script lang="tsx" setup>
-import { computed, onMounted, ref, unref } from 'vue';
-import XEUtils from 'xe-utils';
-import { VXETable, Grid, VxeGridProps, VxeTableEvents } from 'vxe-table';
-import zhCN from 'vxe-table/es/locale/lang/zh-CN';
-import { merge, omit } from 'lodash-es';
+<script lang="ts" setup>
+import { computed, onMounted, ref, unref, useAttrs } from 'vue';
+import { NDataTable } from 'naive-ui';
+import { isBoolean, omit } from 'lodash-es';
 import { useLoading } from '@/hooks';
+import { BasicTableInstance, BasicTableProps, SizeType } from '@/components/basic/table';
+import { useInnerRegisterComp } from '@/hooks/common/useRegisterComp';
+import { useTableHeader } from '@/components/basic/table/src/hooks/useTableHeader';
 import useDataSource from './hooks/useDataSource';
-import useEmpty from './hooks/useEmpty';
-import { BasicTableInstance, BasicTableProps } from './types/table';
+import usePagination from './hooks/usePagination';
+import { Search, TableHeader } from './components';
+import { createTableContext } from './hooks/useTableContext';
 
-const propsRef = ref<Partial<BasicTableProps>>({});
+const attrs = useAttrs();
 
-VXETable.setup({
-  i18n: (key, args) => XEUtils.toFormatString(XEUtils.get(zhCN, key), args)
-});
+// const slots = useSlots();
+
+const wrapRef = ref(null);
+
+const emit = defineEmits(['register', 'fetch-error']);
+
+const { propsRef, setProps } = useInnerRegisterComp<BasicTableProps>();
 
 const { loading, startLoading, endLoading } = useLoading();
 
-const emit = defineEmits(['register']);
-
-const onEditClosed: VxeTableEvents.EditClosed = ({ row, column, $table }) => {
-  if (!$table.isUpdateByRow(row, column.field)) {
-    return;
-  }
-
-  const { onUpdate } = unref(propsRef);
-  if (!onUpdate) {
-    $table.revertData(row, column.field);
-    console.error('缺少 `onUpdate` 回调');
-    return;
-  }
-
-  startLoading();
-  onUpdate(row, column.field, row[column.field])
-    .then(() => {
-      $table.reloadRow(row, null, column.field);
-    })
-    .catch(() => $table.revertData(row, column.field))
-    .finally(() => endLoading());
-};
-
-const { onQuery } = useDataSource(unref(propsRef));
-
-const getBindVal = computed<VxeGridProps>(() => {
+const getProps = computed<Partial<BasicTableProps>>(() => {
   return {
-    round: true,
-    stripe: true,
-    size: 'medium',
-    autoResize: true,
-    loading: loading.value,
-    filterConfig: { remote: true },
-    editConfig: { trigger: 'click', mode: 'cell', showStatus: true },
-    pagerConfig: {
-      pageSize: 15,
-      pageSizes: [15, 20, 50, 100, 200, 500, 1000],
-      autoHidden: true,
-      layouts: ['PrevJump', 'PrevPage', 'JumpNumber', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']
-    },
-    proxyConfig: {
-      sort: true,
-      filter: true,
-      form: true,
-      autoLoad: true,
-      props: { result: 'data', list: 'data', total: 'meta.total' },
-      ajax: {
-        query: params => onQuery(params)
-      }
-    },
-    sortConfig: {
-      remote: true,
-      multiple: true,
-      chronological: true
-    },
-    toolbarConfig: { refresh: true, resizable: true },
-    ...omit(unref(propsRef), ['empty', 'api', 'onUpdate']),
-    onEditClosed
+    immediate: true,
+    ...unref(propsRef)
   };
 });
 
-const { GetCustomEmpty, emptyBind } = useEmpty(unref(propsRef));
+const { getPaginationInfo } = usePagination(getProps);
 
-async function setProps(props: Partial<BasicTableProps>) {
-  propsRef.value = merge(unref(propsRef) || {}, props);
-}
+const { dataSourceRef, reload } = useDataSource(getProps, { emit, startLoading, endLoading, getPaginationInfo });
+
+const { getHeaderProps } = useTableHeader(getProps);
+
+const getBindValues = computed<Partial<BasicTableProps>>(() => {
+  return {
+    remote: true,
+    size: 'large',
+    rowKey: rowData => rowData.id,
+    loading: loading.value,
+    data: unref(dataSourceRef),
+    ...attrs,
+    ...omit(unref(propsRef), [
+      'api',
+      'immediate',
+      'search',
+      'title',
+      'description',
+      'descriptionRenderType',
+      'tableSetting'
+    ])
+  };
+});
+
+const getSearchBindVal = computed(() => {
+  const props = unref(propsRef);
+  if (isBoolean(props.search)) {
+    return { enable: props.search };
+  }
+  return {
+    ...props.search
+  };
+});
 
 const instance: BasicTableInstance = {
   setProps,
-  reload: () => {}
+  reload,
+  getSize: () => {
+    return unref(getBindValues).size as SizeType;
+  }
 };
+createTableContext({ ...instance, getBindValues, wrapRef });
 
 onMounted(() => emit('register', instance));
 </script>
 
-<style scoped>
-.vxe-grid.is--loading:before {
-  background: transparent;
-}
-</style>
+<style lang="less" scoped></style>
