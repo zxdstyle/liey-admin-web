@@ -21,9 +21,14 @@ const [registerBasicTable, _] = useBasicTable({
   tableSetting: {
     advanceFilter: {
       items: [
-        { name: 'name', operates: ['eq'], label: '角色名称', component: 'Input' },
-        { name: 'slug', operates: ['eq'], label: '标识', component: 'Input' },
-        { name: 'created_at', operates: ['eq'], label: '创建时间', component: 'Datetime' }
+        { name: 'name', operates: ['match', 'eq'], label: '角色名称', component: 'Input' },
+        { name: 'slug', operates: ['match', 'eq'], label: '标识', component: 'Input' },
+        {
+          name: 'created_at',
+          operates: ['eq', 'lt', 'lte', 'gt', 'gte', 'between'],
+          label: '创建时间',
+          component: 'Datetime'
+        }
       ]
     }
   }

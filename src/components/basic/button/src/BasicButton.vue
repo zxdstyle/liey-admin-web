@@ -1,5 +1,5 @@
 <template>
-  <NButton v-bind="getBindValue" :class="getButtonClass" @click="onClick">
+  <NButton v-bind="getBindValue" @click="onClick">
     <slot></slot>
     <template #icon>
       <Icon v-if="icon" :icon="icon" :style="{ fontSize: iconSize + 'px' }" />
@@ -13,7 +13,7 @@ import { NButton } from 'naive-ui';
 import { Icon } from '@iconify/vue';
 
 const props = defineProps({
-  color: { type: String, validator: (v: string) => ['error', 'warning', 'success', ''].includes(v) },
+  color: { type: String },
   loading: { type: Boolean },
   disabled: { type: Boolean },
   /**
@@ -29,15 +29,6 @@ const props = defineProps({
 });
 
 const attrs = useAttrs();
-const getButtonClass = computed(() => {
-  const { color, disabled } = props;
-  return [
-    {
-      [`ant-btn-${color}`]: !!color,
-      [`is-disabled`]: disabled
-    }
-  ];
-});
 
 const getBindValue = computed(() => ({ ...unref(attrs), ...props }));
 </script>
